@@ -106,7 +106,6 @@
 <script setup lang="ts">
 import {ref, reactive, onMounted, onBeforeMount} from 'vue'
 import {useI18n} from 'vue-i18n'
-import {postData} from '/@/api/routine/AdminInfo'
 import {ElForm, FormItemRule} from 'element-plus'
 import {onResetForm} from '/@/utils/common'
 import {uuid} from '../../../utils/random'
@@ -116,13 +115,11 @@ import {useAdminInfo} from '/@/stores/adminInfo'
 import {timeFormat} from '/@/components/table/index'
 import {sysAdminInfo, sysAdminInfoUpdate} from "/@/api/sys/admin";
 import {sysLogOwnList} from "/@/api/sys/log";
-import {useJwt} from "/@/stores/jwt";
-import router from "/@/router";
+
 
 const {t} = useI18n()
 const formRef = ref<InstanceType<typeof ElForm>>()
 const adminInfoStore = useAdminInfo()
-const jwtStore = useJwt();
 
 const state: {
     adminInfo: anyObj
@@ -204,13 +201,7 @@ const onAvatarBeforeUpload = (file: any) => {
     fd.append('file', file.raw)
     fileUpload(fd).then((res) => {
         if (res.code == 1) {
-            postData({
-                id: state.adminInfo.id,
-                avatar: res.data.file.url,
-            }).then(() => {
-                adminInfoStore.dataFill({...adminInfoStore.$state, avatar: res.data.file.full_url})
-                state.adminInfo.avatar = res.data.file.full_url
-            })
+
         }
     })
 }
