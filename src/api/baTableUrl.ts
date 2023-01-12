@@ -12,4 +12,6 @@ export const sysJob = '/admin/sys/job/'
 export const sysPermMenu = '/admin/sys/permmenu/'
 export const syslog = '/admin/sys/log/'
 
+//文件管理
+export const fileUploadUrl = '/admin/file/'
 

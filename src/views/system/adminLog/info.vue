@@ -10,25 +10,25 @@
                     <el-descriptions-item :label="t('id')">
                         {{ baTable.form.extend!.info.id }}
                     </el-descriptions-item>
-                    <el-descriptions-item :label="t('routine.adminLog.username')">
+                    <el-descriptions-item :label="t('system.adminLog.username')">
                         {{ baTable.form.extend!.info.username }}
                     </el-descriptions-item>
-                    <el-descriptions-item :label="t('routine.adminLog.uri')">
+                    <el-descriptions-item :label="t('system.adminLog.uri')">
                         {{ baTable.form.extend!.info.uri }}
                     </el-descriptions-item>
-                    <el-descriptions-item :label="t('routine.adminLog.uriDesc')">
+                    <el-descriptions-item :label="t('system.adminLog.uriDesc')">
                         {{ baTable.form.extend!.info.uriDesc }}
                     </el-descriptions-item>
-                    <el-descriptions-item :width="120" :span="2" :label="t('routine.adminLog.ip')">
+                    <el-descriptions-item :width="120" :span="2" :label="t('system.adminLog.ip')">
                         {{ baTable.form.extend!.info.ip }}
                     </el-descriptions-item>
-                    <el-descriptions-item :width="120" :span="2" label="useragent">
+                    <el-descriptions-item :width="120" :span="2" :label="t('system.adminLog.useragent')">
                         {{ baTable.form.extend!.info.useragent }}
                     </el-descriptions-item>
-                    <el-descriptions-item :width="120" :span="2" :label="t('routine.adminLog.req')">
+                    <el-descriptions-item :width="120" :span="2" :label="t('system.adminLog.req')">
                         {{ baTable.form.extend!.info.req }}
                     </el-descriptions-item>
-                    <el-descriptions-item :width="120" :span="2" :label="t('routine.adminLog.resp')">
+                    <el-descriptions-item :width="120" :span="2" :label="t('system.adminLog.resp')">
                         {{ baTable.form.extend!.info.resp }}
                     </el-descriptions-item>
                     <el-descriptions-item :width="120" :span="2" :label="t('createdAt')">

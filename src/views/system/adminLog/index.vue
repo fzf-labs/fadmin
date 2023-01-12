@@ -6,7 +6,7 @@
         <!-- 表格顶部菜单 -->
         <TableHeader
             :buttons="['refresh', 'delete', 'comSearch', 'quickSearch', 'columnDisplay']"
-            :quick-search-placeholder="t('Fuzzy query Placeholder', { fields: t('routine.adminLog.title') })"
+            :quick-search-placeholder="t('Fuzzy query Placeholder', { fields: t('system.adminLog.title') })"
         />
         <!-- 表格 -->
         <!-- 要使用`el-table`组件原有的属性，直接加在Table标签上即可 -->
@@ -63,7 +63,7 @@ const baTable = new baTableClass(
                 width: 70
             },
             {
-                label: t('routine.adminLog.username'),
+                label: t('system.adminLog.username'),
                 prop: 'username',
                 align: 'center',
                 operator: 'LIKE',
@@ -71,7 +71,7 @@ const baTable = new baTableClass(
                 width: 160,
             },
             {
-                label: t('routine.adminLog.uri'),
+                label: t('system.adminLog.uri'),
                 prop: 'uri',
                 align: 'center',
                 operator: 'LIKE',
@@ -79,7 +79,7 @@ const baTable = new baTableClass(
                 'show-overflow-tooltip': true,
             },
             {
-                label: t('routine.adminLog.uriDesc'),
+                label: t('system.adminLog.uriDesc'),
                 prop: 'uriDesc',
                 align: 'center',
                 operator: 'LIKE',
@@ -87,7 +87,7 @@ const baTable = new baTableClass(
                 'show-overflow-tooltip': true,
             },
             {
-                label: t('routine.adminLog.ip'),
+                label: t('system.adminLog.ip'),
                 prop: 'ip',
                 align: 'center',
                 operator: 'LIKE',
@@ -95,7 +95,7 @@ const baTable = new baTableClass(
                 render: 'tag'
             },
             {
-                label: t('routine.adminLog.useragent'),
+                label: t('system.adminLog.useragent'),
                 prop: 'useragent',
                 align: 'center',
                 operator: 'LIKE',
@@ -103,7 +103,7 @@ const baTable = new baTableClass(
                 'show-overflow-tooltip': true,
             },
             {
-                label: t('routine.adminLog.req'),
+                label: t('system.adminLog.req'),
                 prop: 'req',
                 align: 'center',
                 operator: 'LIKE',
@@ -111,7 +111,7 @@ const baTable = new baTableClass(
                 'show-overflow-tooltip': true,
             },
             {
-                label: t('routine.adminLog.resp'),
+                label: t('system.adminLog.resp'),
                 prop: 'resp',
                 align: 'center',
                 operator: 'LIKE',
@@ -119,7 +119,7 @@ const baTable = new baTableClass(
                 'show-overflow-tooltip': true,
             },
             {
-                label: t('routine.adminLog.createdAt'),
+                label: t('system.adminLog.createdAt'),
                 prop: 'createdAt',
                 align: 'center',
                 render: 'datetime',
@@ -170,7 +170,7 @@ const infoButtonClick = (row: TableRow) => {
 import {defineComponent} from 'vue'
 
 export default defineComponent({
-    name: 'auth/adminLog',
+    name: 'system/adminLog',
 })
 </script>
 
