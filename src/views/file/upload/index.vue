@@ -7,21 +7,19 @@
             <!-- 表格顶部菜单 -->
             <TableHeader
                 :buttons="['refresh', 'delete', 'comSearch', 'quickSearch', 'columnDisplay']"
-                :quick-search-placeholder="t('Fuzzy query Placeholder', { fields: t('file.upload.title') })"
+                :quick-search-placeholder="t('Fuzzy query Placeholder', { fields: t('file.upload.fileName') })"
             />
             <!-- 表格 -->
             <!-- 要使用`el-table`组件原有的属性，直接加在Table标签上即可 -->
             <Table ref="tableRef"/>
 
-            <!-- 编辑和新增表单 -->
-            <PopupForm/>
+            <Info/>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import {ref, onMounted, provide} from 'vue'
-import PopupForm from './popupForm.vue'
 import Table from '/@/components/table/index.vue'
 import TableHeader from '/@/components/table/header/index.vue'
 import baTableClass from '/@/utils/baTable'
@@ -30,11 +28,29 @@ import {previewRenderFormatter} from './index'
 import {baTableApi} from '/@/api/common'
 import {useI18n} from 'vue-i18n'
 import {fileUploadUrl} from "/@/api/baTableUrl";
+import Info from "/@/views/file/upload/info.vue";
+import {cloneDeep, concat} from "lodash-es";
+import {buildJsonToElTreeData} from "/@/utils/common";
 
 const {t} = useI18n()
 const tableRef = ref()
 
-const optBtn = defaultOptButtons(['edit', 'delete'])
+let optButtons: OptButton[] = [
+    {
+        render: 'tipButton',
+        name: 'info',
+        title: 'info',
+        text: '',
+        type: 'primary',
+        icon: 'fa fa-search-plus',
+        class: 'table-row-edit',
+        disabledTip: false,
+        click: (row: TableRow) => {
+            infoButtonClick(row)
+        },
+    },
+]
+optButtons = concat(optButtons, defaultOptButtons(['delete']))
 
 const baTable = new baTableClass(new baTableApi(fileUploadUrl), {
     column: [
@@ -76,14 +92,14 @@ const baTable = new baTableClass(new baTableApi(fileUploadUrl), {
             label: t('file.upload.ext'),
             prop: 'ext',
             align: 'center',
-            operator: 'LIKE',
-            operatorPlaceholder: t('Fuzzy query'),
+            operator: false,
         }, {
             label: t('file.upload.storage'),
             prop: 'storage',
             align: 'center',
-            operator: 'LIKE',
-            operatorPlaceholder: t('Fuzzy query'),
+            render: 'tag',
+            custom: {'local': 'success', 'ali_oss': 'success','txy_oss': 'success'},
+            replaceValue: {'local': t('file.upload.local'), 'ali_oss': t('file.upload.ali_oss'),'txy_oss': t('file.upload.txy_oss')},
         },
         {
             label: t('file.upload.size'),
@@ -110,7 +126,7 @@ const baTable = new baTableClass(new baTableApi(fileUploadUrl), {
             align: 'center',
             width: '100',
             render: 'buttons',
-            buttons: optBtn,
+            buttons: optButtons,
             operator: false,
         },
     ],
@@ -126,6 +142,18 @@ onMounted(() => {
         baTable.beforeSort()
     })
 })
+/** 点击查看详情按钮响应 */
+const infoButtonClick = (row: TableRow) => {
+    if (!row) return
+    // 数据来自表格数据,未重新请求api,深克隆,不然可能会影响表格
+    let rowClone = cloneDeep(row)
+    rowClone.data = rowClone.data ? [{
+        label: '点击展开',
+        children: buildJsonToElTreeData(JSON.parse(rowClone.data))
+    }] : []
+    baTable.form.extend!['info'] = rowClone
+    baTable.form.operate = 'info'
+}
 </script>
 
 <script lang="ts">

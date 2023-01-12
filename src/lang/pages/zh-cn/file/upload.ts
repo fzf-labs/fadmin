@@ -4,7 +4,11 @@ export default {
     "originalFileName": "原名称",
     "storage": "存储方式",
     "path": "文件路径",
+    "url": "地址",
     "ext": "后缀",
     "size": "文件大小",
     "status": "状态",
+    "local": "本地存储",
+    "ali_oss": "阿里云OSS",
+    "txy_oss": "腾讯云OSS",
 }
