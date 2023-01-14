@@ -19,7 +19,7 @@
             <template v-else #default>
                 <template v-if="type == 'image' || type == 'images'">
                     <div v-if="!hideSelectFile" @click.stop="state.selectFile.show = true" class="ba-upload-select-image">
-                        {{ $t('routine.attachment.choice') }}
+                        {{ $t('file.upload.choice') }}
                     </div>
                     <Icon class="ba-upload-icon" name="el-icon-Plus" size="30" color="#c0c4cc" />
                 </template>
@@ -30,7 +30,7 @@
                     </el-button>
                     <el-button v-if="!hideSelectFile" @click.stop="state.selectFile.show = true" type="success">
                         <Icon name="fa fa-th-list" size="14px" color="#ffffff" />
-                        <span class="ml-6">{{ $t('routine.attachment.choice') }}</span>
+                        <span class="ml-6">{{ $t('file.upload.choice') }}</span>
                     </el-button>
                 </template>
             </template>
@@ -61,8 +61,6 @@ interface Props {
     // 上传请求时的额外携带数据
     data?: anyObj
     modelValue: string | string[]
-    // 返回绝对路径
-    returnFullUrl?: boolean
     // 隐藏附件选择器
     hideSelectFile?: boolean
     // 可自定义el-upload的其他属性
@@ -78,7 +76,6 @@ const props = withDefaults(defineProps<Props>(), {
         return {}
     },
     modelValue: () => [],
-    returnFullUrl: false,
     hideSelectFile: false,
     attr: () => {
         return {}
@@ -111,7 +108,6 @@ const state: {
         show: boolean
         type?: 'image' | 'file'
         limit?: number
-        returnFullUrl: boolean
     }
     events: anyObj
 } = reactive({
@@ -127,7 +123,6 @@ const state: {
     selectFile: {
         show: false,
         type: 'file',
-        returnFullUrl: props.returnFullUrl,
     },
     events: [],
 })
@@ -262,7 +257,7 @@ const init = (modelValue: string | string[]) => {
     }
 
     // 超出过滤 || 确定返回的URL完整
-    if (limitExceed() || props.returnFullUrl) {
+    if (limitExceed()) {
         emits('update:modelValue', getAllUrls())
     }
     state.key = uuid()
@@ -275,7 +270,6 @@ const getAllUrls = (returnType: string = state.defaultReturnType) => {
     for (const key in state.fileList) {
         if (state.fileList[key].serverUrl) urlList.push(state.fileList[key].serverUrl)
     }
-    if (props.returnFullUrl) urlList = arrayFullUrl(urlList as string[])
     return returnType === 'string' ? urlList.join(',') : (urlList as string[])
 }
 

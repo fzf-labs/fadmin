@@ -5,31 +5,31 @@
             width="60%"
             :model-value="modelValue"
             class="ba-upload-select-dialog"
-            :title="t('routine.attachment.Select File')"
+            :title="t('file.upload.selectFile')"
             :append-to-body="true"
             :destroy-on-close="true"
             top="4vh"
         >
             <TableHeader
                 :buttons="['refresh', 'comSearch', 'quickSearch', 'columnDisplay']"
-                :quick-search-placeholder="t('Fuzzy query Placeholder', { fields: t('routine.attachment.Original name') })"
+                :quick-search-placeholder="t('Fuzzy query Placeholder', { fields: t('file.upload.originalFileName') })"
             >
-                <el-tooltip :content="t('routine.attachment.choice')" placement="top">
+                <el-tooltip :content="t('file.upload.choice')" placement="top">
                     <el-button
                         @click="onChoice"
-                        :disabled="baTable.table.selection!.length > 0 ? false : true"
+                        :disabled="baTable.table.selection!.length<=0"
                         v-blur
                         class="table-header-operate"
                         type="primary"
                     >
                         <Icon name="fa fa-check"/>
-                        <span class="table-header-operate-text">{{ t('routine.attachment.choice') }}</span>
+                        <span class="table-header-operate-text">{{ t('file.upload.choice') }}</span>
                     </el-button>
                 </el-tooltip>
                 <div class="ml-10" v-if="limit !== 0">
-                    {{ t('routine.attachment.You can also select') }}
+                    {{ t('file.upload.youCanAlsoSelect') }}
                     <span class="selection-count">{{ limit - baTable.table.selection!.length }}</span>
-                    {{ t('routine.attachment.items') }}
+                    {{ t('file.upload.items') }}
                 </div>
             </TableHeader>
 
@@ -44,21 +44,19 @@ import {useI18n} from 'vue-i18n'
 import Table from '/@/components/table/index.vue'
 import TableHeader from '/@/components/table/header/index.vue'
 import baTableClass from '/@/utils/baTable'
-import {routineAttachment} from '/@/api/baTableUrl'
 import {baTableApi, buildSuffixSvgUrl} from '/@/api/common'
+import {fileUploadUrl} from "/@/api/baTableUrl";
 
 interface Props {
     type?: 'image' | 'file'
     limit?: number
     modelValue: boolean
-    returnFullUrl?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
     type: 'file',
     limit: 0,
     modelValue: false,
-    returnFullUrl: false,
 })
 
 const emits = defineEmits<{
@@ -77,7 +75,7 @@ const optBtn: OptButton[] = [
     {
         render: 'tipButton',
         name: 'choice',
-        text: t('routine.attachment.choice'),
+        text: t('file.upload.choice'),
         type: 'primary',
         icon: 'fa fa-check',
         class: 'table-row-choice',
@@ -85,7 +83,7 @@ const optBtn: OptButton[] = [
         click: (row: TableRow) => {
             const elTableRef = tableRef.value.getRef()
             elTableRef.clearSelection()
-            emits('choice', props.returnFullUrl ? [row.full_url] : [row.url])
+            emits('choice', row.url)
         },
     },
 ]
@@ -99,7 +97,8 @@ const previewRenderFormatter = (row: TableRow, column: TableColumn, cellValue: s
     }
     return buildSuffixSvgUrl(cellValue)
 }
-const baTable = new baTableClass(new baTableApi(routineAttachment), {
+
+const baTable = new baTableClass(new baTableApi(fileUploadUrl), {
     column: [
         {
             type: 'selection',
@@ -121,71 +120,57 @@ const baTable = new baTableClass(new baTableApi(routineAttachment), {
             label: t('id'),
             prop: 'id',
             align: 'center',
-            operator: 'LIKE',
-            operatorPlaceholder: t('Fuzzy query'),
+            operator: '=',
+            operatorPlaceholder: t('Exact match'),
             width: 70
         },
         {
-            label: t('routine.attachment.Breakdown'),
-            prop: 'topic',
+            label: t('file.upload.fileCategory'),
+            prop: 'fileCategory',
+            align: 'center',
+            operator: '=',
+            operatorPlaceholder: t('Exact match'),
+        }, {
+            label: t('file.upload.originalFileName'),
+            prop: 'originalFileName',
             align: 'center',
             operator: 'LIKE',
-            operatorPlaceholder: t('Fuzzy query')
+            operatorPlaceholder: t('Fuzzy query'),
         },
         {
-            label: t('routine.attachment.preview'),
-            prop: 'suffix',
+            label: t('file.upload.fileName'),
+            prop: 'fileName',
             align: 'center',
-            renderFormatter: previewRenderFormatter,
-            render: 'image',
+            operator: 'LIKE',
+            operatorPlaceholder: t('Fuzzy query'),
+        }, {
+            label: t('file.upload.path'),
+            prop: 'path',
+            align: 'center',
             operator: false,
         },
         {
-            label: t('routine.attachment.type'),
-            prop: 'mimetype',
-            align: 'center',
-            operator: 'LIKE',
-            'show-overflow-tooltip': true,
-            operatorPlaceholder: t('Fuzzy query'),
-        },
-        {
-            label: t('routine.attachment.size'),
+            label: t('file.upload.size'),
             prop: 'size',
             align: 'center',
             formatter: (row: TableRow, column: TableColumn, cellValue: string) => {
-                var size = parseFloat(cellValue)
-                var i = Math.floor(Math.log(size) / Math.log(1024))
-                return parseInt((size / Math.pow(1024, i)).toFixed(i < 2 ? 0 : 2)) * 1 + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][i]
+                const size = parseFloat(cellValue)
+                const i = Math.floor(Math.log(size) / Math.log(1024))
+                return (size / Math.pow(1024, i)).toFixed(i < 1 ? 0 : 2) + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][i]
             },
-            operator: 'RANGE',
-            sortable: 'custom',
-            operatorPlaceholder: 'bytes',
+            operator: false,
         },
         {
-            label: t('routine.attachment.Last upload time'),
-            prop: 'lastuploadtime',
+            label: t('file.upload.storage'),
+            prop: 'storage',
             align: 'center',
-            render: 'datetime',
-            operator: 'RANGE',
-            width: 160,
-            sortable: 'custom',
-        },
-        {
-            show: false,
-            label: t('routine.attachment.Upload (Reference) times'),
-            prop: 'quote',
-            align: 'center',
-            width: 150,
-            operator: 'RANGE',
-            sortable: 'custom',
-        },
-        {
-            label: t('routine.attachment.Original name'),
-            prop: 'name',
-            align: 'center',
-            'show-overflow-tooltip': true,
-            operator: 'LIKE',
-            operatorPlaceholder: t('Fuzzy query'),
+            render: 'tag',
+            custom: {'local': 'success', 'ali_oss': 'success', 'txy_oss': 'success'},
+            replaceValue: {
+                'local': t('file.upload.local'),
+                'ali_oss': t('file.upload.ali_oss'),
+                'txy_oss': t('file.upload.txy_oss')
+            },
         },
         {
             label: t('operate'),
@@ -196,17 +181,13 @@ const baTable = new baTableClass(new baTableApi(routineAttachment), {
             operator: false,
         },
     ],
-    defaultOrder: {prop: 'lastuploadtime', order: 'desc'},
+    defaultOrder: {prop: 'id', order: 'desc'},
 })
 
 provide('baTable', baTable)
 
 const getIndex = () => {
-    if (props.type == 'image') {
-        baTable.table.filter!.search = [{field: 'mimetype', val: 'image', operator: 'LIKE'}]
-    }
     baTable.table.ref = tableRef.value
-    baTable.table.filter!.limit = 8
     baTable.getList()?.then(() => {
         baTable.afterSort()
     })
@@ -217,7 +198,7 @@ const onChoice = () => {
     if (baTable.table.selection?.length) {
         let files: string[] = []
         for (const key in baTable.table.selection) {
-            files.push(props.returnFullUrl ? baTable.table.selection[key].full_url : baTable.table.selection[key].url)
+            files.push(baTable.table.selection[key].url)
         }
         emits('choice', files)
         const elTableRef = tableRef.value.getRef()

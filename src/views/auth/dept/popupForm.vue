@@ -22,7 +22,7 @@
                     :label-width="baTable.form.labelWidth + 'px'"
                     :rules="rules"
                 >
-                    <el-form-item prop="pid" :label="t('resource.category.pid')">
+                    <el-form-item prop="pid" :label="t('auth.dept.pid')">
                         <el-cascader v-model="baTable.form.items!.pid" :options="baTable.table.extend['treeList']"
                                      :props="pidProps" clearable/>
                     </el-form-item>

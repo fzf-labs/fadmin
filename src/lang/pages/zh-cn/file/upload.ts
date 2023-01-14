@@ -11,4 +11,13 @@ export default {
     "local": "本地存储",
     "ali_oss": "阿里云OSS",
     "txy_oss": "腾讯云OSS",
+
+
+    "selectFile": "选择文件",
+    "choice": "选择",
+    "youCanAlsoSelect": "您可以选择",
+    "items": "项",
+
+
+
 }
