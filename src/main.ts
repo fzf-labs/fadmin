@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { loadLang } from '/@/lang/index'
+import { loadLang } from '/@/lang'
 import { registerIcons } from '/@/utils/common'
 import ElementPlus from 'element-plus'
 import mitt from 'mitt'
@@ -19,6 +19,8 @@ async function start() {
 
     // 全局语言包加载
     const i18n = await loadLang(app)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     app.use(ElementPlus, { i18n: i18n.global.t })
 
     // 全局注册
