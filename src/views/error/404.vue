@@ -9,7 +9,7 @@
             </div>
             <div class="details">
                 <div class="qr-image">
-                    <img src="~/assets/qr.png" alt="QR Code" />
+<!--                    <img src="~/assets/bg-dark.jpg" alt="QR Code" />-->
                 </div>
                 <div class="stopcode">
                     <div class="stopcode-text">{{ $t('404.We will automatically return to the previous page when we are finished') }}</div>

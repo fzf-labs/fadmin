@@ -24,7 +24,6 @@ import Table from '/@/components/table/index.vue'
 import TableHeader from '/@/components/table/header/index.vue'
 import baTableClass from '/@/utils/baTable'
 import {defaultOptButtons} from '/@/components/table/index'
-import {previewRenderFormatter} from './index'
 import {baTableApi} from '/@/api/common'
 import {useI18n} from 'vue-i18n'
 import {fileUploadUrl} from "/@/api/baTableUrl";

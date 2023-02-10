@@ -44,7 +44,7 @@ import {useI18n} from 'vue-i18n'
 import Table from '/@/components/table/index.vue'
 import TableHeader from '/@/components/table/header/index.vue'
 import baTableClass from '/@/utils/baTable'
-import {baTableApi, buildSuffixSvgUrl} from '/@/api/common'
+import {baTableApi} from '/@/api/common'
 import {fileUploadUrl} from "/@/api/baTableUrl";
 
 interface Props {
@@ -87,16 +87,6 @@ const optBtn: OptButton[] = [
         },
     },
 ]
-/**
- * 表格和表单中文件预览图的生成
- */
-const previewRenderFormatter = (row: TableRow, column: TableColumn, cellValue: string) => {
-    const imgSuffix = ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'webp']
-    if (imgSuffix.includes(cellValue)) {
-        return row.full_url
-    }
-    return buildSuffixSvgUrl(cellValue)
-}
 
 const baTable = new baTableClass(new baTableApi(fileUploadUrl), {
     column: [

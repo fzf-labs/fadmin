@@ -110,7 +110,7 @@ import {ElForm, FormItemRule} from 'element-plus'
 import {onResetForm} from '/@/utils/common'
 import {uuid} from '../../../utils/random'
 import {buildValidatorData} from '/@/utils/validate'
-import {fileUpload} from '/@/api/common'
+import {fileUpload} from '/@/api/file/upload'
 import {useAdminInfo} from '/@/stores/adminInfo'
 import {timeFormat} from '/@/components/table/index'
 import {sysAdminInfo, sysAdminInfoUpdate} from "/@/api/sys/admin";

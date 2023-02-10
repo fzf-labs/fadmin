@@ -1,82 +1,13 @@
 import createAxios from '/@/utils/axios'
-import {isAdminApp, checkFileMimetype} from '/@/utils/common'
-import {getUrl} from '/@/utils/axios'
-import {ElNotification, UploadRawFile} from 'element-plus'
-import {useSiteConfig} from '/@/stores/siteConfig'
-import {state as uploadExpandState, fileUpload as uploadExpand} from '/@/components/baInput/components/baUpload'
-import {i18n} from '../lang'
 
 /*
  * 公共请求函数和Url定义
  */
 
-// Admin模块
-export const adminUploadUrl = '/admin/ajax/upload'
-export const adminBuildSuffixSvgUrl = '/admin/ajax/buildSuffixSvg'
 export const adminAreaUrl = '/admin/ajax/area'
-export const getTablePkUrl = '/admin/ajax/getTablePk'
 export const getTableFieldListUrl = '/admin/ajax/getTableFieldList'
 export const clearCacheUrl = '/admin/ajax/clearCache'
 
-// 公共
-export const captchaUrl = '/sys/admin/login/captcha'
-export const refreshTokenUrl = '/api/common/refreshToken'
-
-// api模块(前台)
-export const apiUploadUrl = '/api/ajax/upload'
-export const apiBuildSuffixSvgUrl = '/api/ajax/buildSuffixSvg'
-export const apiAreaUrl = '/api/ajax/area'
-export const apiSendSms = '/api/Sms/send'
-export const apiSendEms = '/api/Ems/send'
-
-/**
- * 上传文件
- */
-export function fileUpload(fd: FormData, params: anyObj = {}, forceLocal = false): ApiPromise {
-    let errorMsg = ''
-    const file = fd.get('file') as UploadRawFile
-    const siteConfig = useSiteConfig()
-
-    if (!file.name || typeof file.size == 'undefined') {
-        errorMsg = i18n.global.t('utils.The data of the uploaded file is incomplete!')
-    } else if (!checkFileMimetype(file.name, file.type)) {
-        errorMsg = i18n.global.t('utils.The type of uploaded file is not allowed!')
-    } else if (file.size > siteConfig.upload.maxsize) {
-        errorMsg = i18n.global.t('utils.The size of the uploaded file exceeds the allowed range!')
-    }
-    if (errorMsg) {
-        return new Promise((resolve, reject) => {
-            ElNotification({
-                type: 'error',
-                message: errorMsg,
-            })
-            reject(errorMsg)
-        })
-    }
-
-    if (!forceLocal && uploadExpandState() == 'enable') {
-        return uploadExpand(fd, params)
-    }
-
-    return createAxios({
-        url: isAdminApp() ? adminUploadUrl : apiUploadUrl,
-        method: 'POST',
-        data: fd,
-        params: params,
-    }) as ApiPromise
-}
-
-/**
- * 生成文件后缀icon的svg图片
- * @param suffix 后缀名
- * @param background 背景色,如:rgb(255,255,255)
- */
-export function buildSuffixSvgUrl(suffix: string, background = '') {
-    return (
-        getUrl() +
-        (isAdminApp() ? adminBuildSuffixSvgUrl : apiBuildSuffixSvgUrl)
-    )
-}
 
 /**
  * 获取地区数据
@@ -90,48 +21,10 @@ export function getArea(values: number[]) {
         params.city = values[1]
     }
     return createAxios({
-        url: isAdminApp() ? adminAreaUrl : apiAreaUrl,
+        url: adminAreaUrl,
         method: 'GET',
         params: params,
     })
-}
-
-/**
- * 发送短信
- */
-export function sendSms(mobile: string, templateCode: string) {
-    return createAxios(
-        {
-            url: apiSendSms,
-            method: 'POST',
-            data: {
-                mobile: mobile,
-                template_code: templateCode,
-            },
-        },
-        {
-            showSuccessMessage: true,
-        }
-    ) as ApiPromise
-}
-
-/**
- * 发送邮件
- */
-export function sendEms(email: string, event: string) {
-    return createAxios(
-        {
-            url: apiSendEms,
-            method: 'POST',
-            data: {
-                email: email,
-                event: event,
-            },
-        },
-        {
-            showSuccessMessage: true,
-        }
-    ) as ApiPromise
 }
 
 /*
@@ -167,21 +60,6 @@ export function getSelectData(remoteUrl: string, q: string, params: {}) {
     })
 }
 
-export function buildCaptchaUrl() {
-    return getUrl() + captchaUrl + '?server=1'
-}
-
-
-export function getTablePk(table: string) {
-    return createAxios({
-        url: getTablePkUrl,
-        method: 'get',
-        params: {
-            table: table,
-        },
-    })
-}
-
 /**
  * 获取数据表的字段
  * @param table 数据表名
@@ -196,16 +74,6 @@ export function getTableFieldList(table: string, clean = true) {
             clean: clean ? 1 : 0,
         },
     })
-}
-
-export function refreshToken(): ApiPromise {
-    return createAxios({
-        url: refreshTokenUrl,
-        method: 'POST',
-        data: {
-            refresh_token: isAdminApp() ? "" : "",
-        },
-    }) as ApiPromise
 }
 
 /**

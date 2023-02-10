@@ -4,11 +4,11 @@ import { SiteConfig } from '/@/stores/interface'
 export const useSiteConfig = defineStore('siteConfig', {
     state: (): SiteConfig => {
         return {
-            site_name: 'Fadmin',
-            record_number: "",
+            siteName: 'Fadmin',
+            recordNumber: '',
             version: '',
-            cdn_url: '',
-            api_url: '',
+            cdnUrl: '',
+            apiUrl: '',
             upload: {
                 mode: 'local',
                 maxsize: 10485760,

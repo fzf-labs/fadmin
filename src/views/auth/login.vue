@@ -6,7 +6,7 @@
                     <a href="#"
                         ><div class="sidebar-logo-box">
                             <img src="~assets/logo.png" />
-                            <h3>{{ siteConfig.site_name }}</h3>
+                            <h3>{{ siteConfig.siteName }}</h3>
                         </div>
                     </a>
                     <h1 class="sidebar-tagline"></h1>
@@ -31,7 +31,7 @@
             </div>
             <main>
                 <div class="content-main">
-                    <h2 class="content-title">{{ t('adminLogin.Sign in to') + ' ' + siteConfig.site_name }}</h2>
+                    <h2 class="content-title">{{ t('adminLogin.Sign in to') + ' ' + siteConfig.siteName }}</h2>
 
                     <el-divider class="content-hr">{{ t('adminLogin.Welcome') }}</el-divider>
                     <el-form @keyup.enter="onSubmit(formRef)" ref="formRef" :rules="rules" :model="form">

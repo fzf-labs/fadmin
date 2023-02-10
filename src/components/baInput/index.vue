@@ -27,14 +27,12 @@ export default defineComponent({
         // 输入框的附加属性
         attr: {
             type: Object as PropType<InputAttr>,
-            default: () => {
-            },
+            default: () => {},
         },
         // 额外数据,radio、checkbox的选项等数据
         data: {
             type: Object as PropType<InputData>,
-            default: () => {
-            },
+            default: () => {},
         },
     },
     emits: ['update:modelValue'],
