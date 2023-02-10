@@ -26,6 +26,7 @@
         "sortablejs": "^1.15.0",
         "v-code-diff": "^0.3.12",
         "vue": "~3.2.47",
+        "vue-echarts": "^6.5.4",
         "vue-i18n": "~9.1.10",
         "vue-router": "~4.0.16"
     },
